@@ -1,5 +1,7 @@
 package com.adedom.websocketandroid
 
+import com.chat.ChatResponse
+import com.google.gson.Gson
 import io.ktor.client.*
 import io.ktor.client.engine.okhttp.*
 import io.ktor.client.features.websocket.*
@@ -17,15 +19,16 @@ class WebSocketDruChat(private val listener: SetOnWebSocketListener) {
     suspend fun initialize() {
         client.wss(
             method = HttpMethod.Get,
-            host = "dru-chat.herokuapp.com",
+            host = "adedom-chatv2.herokuapp.com",
             port = DEFAULT_PORT,
-            path = "/ws",
+            path = "/webSocket/chatv2",
         ) {
 
             incoming.receiveAsFlow()
                 .collect { frame ->
-                    val message = (frame as Frame.Text).readText()
-                    listener.onWebSocket(message)
+                    val text = (frame as Frame.Text).readText()
+                    val chat = Gson().fromJson(text, ChatResponse::class.java)
+                    listener.onWebSocket(chat)
                 }
 
         }
@@ -37,7 +40,7 @@ class WebSocketDruChat(private val listener: SetOnWebSocketListener) {
     }
 
     interface SetOnWebSocketListener {
-        fun onWebSocket(message: String)
+        fun onWebSocket(chat: ChatResponse)
     }
 
 }

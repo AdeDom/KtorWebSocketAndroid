@@ -26,10 +26,12 @@ class MainViewModel(
         }
     }
 
-    override fun onWebSocket(message: String) {
-        val list = _chat.value as MutableList<ChatResponse>
-        list.add(ChatResponse(message = message))
-        _chat.value = list
+    override fun onWebSocket(chat: ChatResponse) {
+        _chat.value?.let {
+            val list = _chat.value as MutableList<ChatResponse>
+            list.add(chat)
+            _chat.value = list
+        }
     }
 
     override fun coroutineExceptionHandler() = initialize()
