@@ -10,7 +10,6 @@ abstract class BaseViewModel<S : Any>(private val initialState: S) : ViewModel()
 
     private val job = SupervisorJob()
     private val exceptionHandler = CoroutineExceptionHandler { _, err ->
-        coroutineExceptionHandler()
         setError(err)
     }
     private val _state = MutableLiveData<S>().apply { value = initialState }
@@ -36,7 +35,5 @@ abstract class BaseViewModel<S : Any>(private val initialState: S) : ViewModel()
     protected fun setError(throwable: Throwable) {
         _error.value = throwable
     }
-
-    open fun coroutineExceptionHandler() {}
 
 }

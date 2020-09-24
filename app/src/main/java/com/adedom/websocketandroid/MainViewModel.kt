@@ -12,9 +12,6 @@ class MainViewModel(
     WebSocketDruChat.SetOnWebSocketListener {
 
     private lateinit var webSocketDruChat: WebSocketDruChat
-    private val _chat = MutableLiveData<List<ChatResponse>>()
-    val chat: LiveData<List<ChatResponse>>
-        get() = _chat
 
     private val _callApi = MutableLiveData<String>()
     val callApi: LiveData<String>
@@ -27,21 +24,19 @@ class MainViewModel(
     }
 
     override fun onWebSocket(chat: ChatResponse) {
-        _chat.value?.let {
-            val list = _chat.value as MutableList<ChatResponse>
-            list.add(chat)
-            _chat.value = list
-        }
+        setState { copy(isChat = true, chat = chat) }
+        setState { copy(isChat = false) }
     }
-
-    override fun coroutineExceptionHandler() = initialize()
 
     fun fetchChat() {
         launch {
             try {
                 setState { copy(loading = true) }
                 val response = repository.fetchChat()
-                _chat.value = response.chat
+                response.chat.forEach {
+                    setState { copy(isChat = true, chat = it) }
+                }
+                setState { copy(isChat = false) }
                 _callApi.value = response.message
                 setState { copy(loading = false) }
             } catch (e: Throwable) {
