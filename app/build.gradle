@@ -48,7 +48,7 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
-    implementation 'com.github.AdeDom:chatV2:0.0.1'
+    implementation 'com.github.AdeDom:chatV2:0.0.4'
 
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
@@ -59,6 +59,5 @@ dependencies {
     implementation "org.koin:koin-androidx-scope:2.1.6"
     implementation "org.koin:koin-androidx-viewmodel:2.1.6"
     implementation "org.koin:koin-androidx-fragment:2.1.6"
-    implementation 'com.google.code.gson:gson:2.8.6'
 
 }

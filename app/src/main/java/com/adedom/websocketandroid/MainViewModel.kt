@@ -9,9 +9,7 @@ import kotlinx.coroutines.launch
 class MainViewModel(
     private val repository: DefaultChatRepository
 ) : BaseViewModel<MainState>(MainState()),
-    WebSocketDruChat.SetOnWebSocketListener {
-
-    private lateinit var webSocketDruChat: WebSocketDruChat
+    SetOnWebSocketListener {
 
     private val _callApi = MutableLiveData<String>()
     val callApi: LiveData<String>
@@ -19,7 +17,7 @@ class MainViewModel(
 
     fun initialize() {
         launch {
-            webSocketDruChat = WebSocketDruChat(this@MainViewModel).apply { initialize() }
+           WebSocketDruChat(this@MainViewModel).apply { initialize() }
         }
     }
 
@@ -54,11 +52,10 @@ class MainViewModel(
         launch {
             try {
                 val message = state.value?.message.orEmpty()
-                val request = SendMessageRequest("Pathiphon", message)
+                val request = SendMessageRequest(message = message)
                 setState { copy(message = "", isSendMessage = true, loading = true) }
                 setState { copy(isSendMessage = false) }
-                val response = repository.sendMessage(request)
-                _callApi.value = response.message
+                sendMessage(request)
                 setState { copy(loading = false) }
             } catch (e: Throwable) {
                 setError(e)
@@ -67,9 +64,11 @@ class MainViewModel(
         }
     }
 
+    override fun coroutineExceptionHandler() = initialize()
+
     override fun onCleared() {
         super.onCleared()
-        webSocketDruChat.closeWebSocket()
+        closeWebSocket()
     }
 
 }
