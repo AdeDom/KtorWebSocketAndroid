@@ -2,8 +2,8 @@ package com.adedom.websocketandroid
 
 import com.chat.FetchChatResponse
 
-class DefaultChatRepositoryImpl(private val api: ApiService) : DefaultChatRepository {
+class DefaultChatRepositoryImpl(private val dataSource: DruChatDataSource) : DefaultChatRepository {
 
-    override suspend fun fetchChat(): FetchChatResponse = api.fetchChat()
+    override suspend fun fetchChat(): FetchChatResponse = dataSource.fetchChat()
 
 }
