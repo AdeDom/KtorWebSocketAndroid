@@ -1,10 +1,14 @@
-package com.adedom.websocketandroid.data.datasource.websocket
+package com.adedom.websocketandroid.data.datasource
 
-import com.adedom.websocketandroid.data.datasource.DataSourceProvider
-import com.adedom.websocketandroid.data.network.websocket.ChatTypeAlias
+import com.adedom.websocketandroid.data.network.ChatTypeAlias
+import com.chat.FetchChatResponse
 import com.chat.SendMessageRequest
 
-class WebSocketDataSourceImpl(private val provider: DataSourceProvider) : WebSocketDataSource {
+class DruChatDataSourceImpl(private val provider: DataSourceProvider) : DruChatDataSource {
+
+    override suspend fun fetchChat(): FetchChatResponse {
+        return provider.getProviderApiService().fetchChat()
+    }
 
     override suspend fun initialize(socket: ChatTypeAlias) {
         provider.getProviderDruChatWebSocket().initialize(socket)

@@ -1,7 +1,7 @@
 package com.adedom.websocketandroid.data.datasource
 
-import com.adedom.websocketandroid.data.network.websocket.DruChatWebSocket
-import com.adedom.websocketandroid.data.network.service.ApiService
+import com.adedom.websocketandroid.data.network.DruChatWebSocket
+import com.adedom.websocketandroid.data.network.ApiService
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
