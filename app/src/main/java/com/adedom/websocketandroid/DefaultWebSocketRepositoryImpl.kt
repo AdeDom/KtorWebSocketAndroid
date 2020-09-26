@@ -3,7 +3,7 @@ package com.adedom.websocketandroid
 import com.chat.SendMessageRequest
 
 class DefaultWebSocketRepositoryImpl(
-    private val dataSource: DruChatDataSource
+    private val dataSource: WebSocketDataSource
 ) : DefaultWebSocketRepository {
 
     override suspend fun initialize(socket: ChatTypeAlias) {

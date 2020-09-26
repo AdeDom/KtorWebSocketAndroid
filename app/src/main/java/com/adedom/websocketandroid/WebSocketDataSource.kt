@@ -1,11 +1,8 @@
 package com.adedom.websocketandroid
 
-import com.chat.ChatResponse
 import com.chat.SendMessageRequest
 
-typealias ChatTypeAlias = (ChatResponse) -> Unit
-
-interface DruChatDataSource {
+interface WebSocketDataSource {
 
     suspend fun initialize(socket: ChatTypeAlias)
 

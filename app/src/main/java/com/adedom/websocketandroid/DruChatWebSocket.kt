@@ -10,7 +10,9 @@ import io.ktor.http.cio.websocket.*
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.receiveAsFlow
 
-class DruChatDataSourceImpl : DruChatDataSource {
+typealias ChatTypeAlias = (ChatResponse) -> Unit
+
+class DruChatWebSocket {
 
     private val client = HttpClient(OkHttp) {
         install(WebSockets)
@@ -43,17 +45,17 @@ class DruChatDataSourceImpl : DruChatDataSource {
         }
     }
 
-    override suspend fun initialize(socket: ChatTypeAlias) {
+    suspend fun initialize(socket: ChatTypeAlias) {
         incomingReceiveFrameText {
             socket.invoke(ChatResponse(message = it))
         }
     }
 
-    override suspend fun sendMessage(sendMessage: SendMessageRequest) {
+    suspend fun sendMessage(sendMessage: SendMessageRequest) {
         outgoingSendFrameText(sendMessage.message)
     }
 
-    override fun closeWebSocket() {
+    fun closeWebSocket() {
         client.close()
     }
 
