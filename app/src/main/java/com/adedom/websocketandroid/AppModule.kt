@@ -18,6 +18,8 @@ val appModule = module {
 
     single<DefaultChatRepository> { DefaultChatRepositoryImpl(get()) }
 
-    viewModel { MainViewModel(get()) }
+    single<DefaultDruChatRepository> { DefaultDruChatRepositoryImpl() }
+
+    viewModel { MainViewModel(get(), get()) }
 
 }

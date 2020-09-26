@@ -2,14 +2,13 @@ package com.adedom.websocketandroid
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.chat.ChatResponse
 import com.chat.SendMessageRequest
 import kotlinx.coroutines.launch
 
 class MainViewModel(
-    private val repository: DefaultChatRepository
-) : BaseViewModel<MainState>(MainState()),
-    SetOnWebSocketListener {
+    private val repository: DefaultChatRepository,
+    private val webSocket: DefaultDruChatRepository
+) : BaseViewModel<MainState>(MainState()) {
 
     private val _callApi = MutableLiveData<String>()
     val callApi: LiveData<String>
@@ -17,13 +16,11 @@ class MainViewModel(
 
     fun initialize() {
         launch {
-           WebSocketDruChat(this@MainViewModel).apply { initialize() }
+            webSocket.initialize {
+                setState { copy(isChat = true, chat = it) }
+                setState { copy(isChat = false) }
+            }
         }
-    }
-
-    override fun onWebSocket(chat: ChatResponse) {
-        setState { copy(isChat = true, chat = chat) }
-        setState { copy(isChat = false) }
     }
 
     fun fetchChat() {
@@ -55,7 +52,7 @@ class MainViewModel(
                 val request = SendMessageRequest(message = message)
                 setState { copy(message = "", isSendMessage = true, loading = true) }
                 setState { copy(isSendMessage = false) }
-                sendMessage(request)
+                webSocket.sendMessage(request)
                 setState { copy(loading = false) }
             } catch (e: Throwable) {
                 setError(e)
@@ -68,7 +65,7 @@ class MainViewModel(
 
     override fun onCleared() {
         super.onCleared()
-        closeWebSocket()
+        webSocket.closeWebSocket()
     }
 
 }
