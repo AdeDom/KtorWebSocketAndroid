@@ -7,7 +7,7 @@ import kotlinx.coroutines.launch
 
 class MainViewModel(
     private val repository: DefaultChatRepository,
-    private val webSocket: DefaultDruChatRepository
+    private val webSocket: DefaultWebSocketRepository
 ) : BaseViewModel<MainState>(MainState()) {
 
     private val _callApi = MutableLiveData<String>()

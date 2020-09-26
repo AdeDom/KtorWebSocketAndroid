@@ -2,7 +2,7 @@ package com.adedom.websocketandroid
 
 import com.chat.SendMessageRequest
 
-interface DefaultDruChatRepository {
+interface DefaultWebSocketRepository {
 
     suspend fun initialize(socket: ChatTypeAlias)
 

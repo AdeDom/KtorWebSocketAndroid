@@ -18,7 +18,9 @@ val appModule = module {
 
     single<DefaultChatRepository> { DefaultChatRepositoryImpl(get()) }
 
-    single<DefaultDruChatRepository> { DefaultDruChatRepositoryImpl() }
+    single<DruChatDataSource> { DruChatDataSourceImpl() }
+
+    single<DefaultWebSocketRepository> { DefaultWebSocketRepositoryImpl(get()) }
 
     viewModel { MainViewModel(get(), get()) }
 
