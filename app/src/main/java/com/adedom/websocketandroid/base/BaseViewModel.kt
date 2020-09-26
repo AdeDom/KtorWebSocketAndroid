@@ -1,4 +1,4 @@
-package com.adedom.websocketandroid
+package com.adedom.websocketandroid.base
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

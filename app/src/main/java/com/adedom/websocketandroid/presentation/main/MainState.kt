@@ -1,4 +1,4 @@
-package com.adedom.websocketandroid
+package com.adedom.websocketandroid.presentation.main
 
 import com.chat.ChatResponse
 

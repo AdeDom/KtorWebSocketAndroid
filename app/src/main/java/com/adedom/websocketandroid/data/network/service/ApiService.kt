@@ -1,4 +1,4 @@
-package com.adedom.websocketandroid
+package com.adedom.websocketandroid.data.network.service
 
 import com.chat.FetchChatResponse
 import retrofit2.http.GET

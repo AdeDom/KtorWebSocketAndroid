@@ -1,4 +1,4 @@
-package com.adedom.websocketandroid
+package com.adedom.websocketandroid.data.datasource.druchat
 
 import com.chat.FetchChatResponse
 

@@ -1,9 +1,11 @@
-package com.adedom.websocketandroid
+package com.adedom.websocketandroid.presentation.main
 
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
+import com.adedom.websocketandroid.R
+import com.adedom.websocketandroid.base.BaseActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 

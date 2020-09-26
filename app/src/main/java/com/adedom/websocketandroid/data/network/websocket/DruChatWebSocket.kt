@@ -1,4 +1,4 @@
-package com.adedom.websocketandroid
+package com.adedom.websocketandroid.data.network.websocket
 
 import com.chat.ChatResponse
 import com.chat.SendMessageRequest

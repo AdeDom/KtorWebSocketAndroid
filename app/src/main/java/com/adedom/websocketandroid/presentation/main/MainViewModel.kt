@@ -1,5 +1,8 @@
-package com.adedom.websocketandroid
+package com.adedom.websocketandroid.presentation.main
 
+import com.adedom.websocketandroid.base.BaseViewModel
+import com.adedom.websocketandroid.data.repository.druchat.DefaultChatRepository
+import com.adedom.websocketandroid.data.repository.websocket.DefaultWebSocketRepository
 import com.chat.SendMessageRequest
 import kotlinx.coroutines.launch
 

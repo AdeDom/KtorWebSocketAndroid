@@ -1,4 +1,4 @@
-package com.adedom.websocketandroid
+package com.adedom.websocketandroid.base
 
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity

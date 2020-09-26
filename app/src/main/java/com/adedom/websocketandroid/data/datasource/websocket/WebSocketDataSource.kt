@@ -1,5 +1,6 @@
-package com.adedom.websocketandroid
+package com.adedom.websocketandroid.data.datasource.websocket
 
+import com.adedom.websocketandroid.data.network.websocket.ChatTypeAlias
 import com.chat.SendMessageRequest
 
 interface WebSocketDataSource {
