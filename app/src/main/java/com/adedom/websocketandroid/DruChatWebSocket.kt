@@ -1,7 +1,6 @@
 package com.adedom.websocketandroid
 
 import com.chat.ChatResponse
-import com.chat.SendMessageRequest
 import io.ktor.client.*
 import io.ktor.client.engine.okhttp.*
 import io.ktor.client.features.websocket.*
@@ -12,35 +11,36 @@ import kotlinx.coroutines.flow.receiveAsFlow
 
 typealias ChatTypeAlias = (ChatResponse) -> Unit
 
-object WebSocketDruChat {
+object DruChatWebSocket {
 
     private val client = HttpClient(OkHttp) {
         install(WebSockets)
     }
 
-    suspend fun initialize(socket: ChatTypeAlias) {
+    private suspend fun webSocket(socket: suspend DefaultClientWebSocketSession.() -> Unit) {
         client.wss(
             method = HttpMethod.Get,
             host = "dru-chat.herokuapp.com",
             port = DEFAULT_PORT,
             path = "/ws",
         ) {
-            incoming.receiveAsFlow()
-                .collect { frame ->
-                    val text = (frame as Frame.Text).readText()
-                    socket.invoke(ChatResponse(message = text))
-                }
+            socket.invoke(this)
         }
     }
 
-    suspend fun sendMessage(sendMessage: SendMessageRequest) {
-        client.wss(
-            method = HttpMethod.Get,
-            host = "dru-chat.herokuapp.com",
-            port = DEFAULT_PORT,
-            path = "/ws",
-        ) {
-            outgoing.send(Frame.Text(sendMessage.message))
+    suspend fun outgoingSendFrameText(text: String) {
+        webSocket {
+            outgoing.send(Frame.Text(text))
+        }
+    }
+
+    suspend fun incomingReceiveFrameText(text: (String) -> Unit) {
+        webSocket {
+            incoming.receiveAsFlow()
+                .collect { frame ->
+                    val readText = (frame as Frame.Text).readText()
+                    text.invoke(readText)
+                }
         }
     }
 

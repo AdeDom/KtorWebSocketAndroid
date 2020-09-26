@@ -1,19 +1,22 @@
 package com.adedom.websocketandroid
 
+import com.chat.ChatResponse
 import com.chat.SendMessageRequest
 
 class DefaultDruChatRepositoryImpl : DefaultDruChatRepository {
 
     override suspend fun initialize(socket: ChatTypeAlias) {
-        WebSocketDruChat.initialize(socket)
+        DruChatWebSocket.incomingReceiveFrameText {
+            socket.invoke(ChatResponse(message = it))
+        }
     }
 
     override suspend fun sendMessage(sendMessage: SendMessageRequest) {
-        WebSocketDruChat.sendMessage(sendMessage)
+        DruChatWebSocket.outgoingSendFrameText(sendMessage.message)
     }
 
     override fun closeWebSocket() {
-        WebSocketDruChat.closeWebSocket()
+        DruChatWebSocket.closeWebSocket()
     }
 
 }
