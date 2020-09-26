@@ -35,6 +35,10 @@ class MainViewModel(
         }
     }
 
+    fun setStateName(name: String) {
+        setState { copy(name = name) }
+    }
+
     fun setStateMessage(message: String) {
         setState { copy(message = message) }
     }
@@ -42,8 +46,9 @@ class MainViewModel(
     fun sendMessage() {
         launch {
             try {
+                val name = state.value?.name.orEmpty()
                 val message = state.value?.message.orEmpty()
-                val request = SendMessageRequest(message = message)
+                val request = SendMessageRequest(name = name, message = message)
                 setState { copy(message = "", isSendMessage = true, loading = true) }
                 setState { copy(isSendMessage = false) }
                 repository.sendMessage(request)

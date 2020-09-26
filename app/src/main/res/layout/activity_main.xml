@@ -5,9 +5,10 @@
     android:layout_height="match_parent">
 
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedScrollView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/etMessage"
+        app:layout_constraintBottom_toTopOf="@+id/etName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -20,6 +21,15 @@
             app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.core.widget.NestedScrollView>
+
+    <EditText
+        android:id="@+id/etName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Name"
+        app:layout_constraintBottom_toTopOf="@+id/etMessage"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
         android:id="@+id/etMessage"

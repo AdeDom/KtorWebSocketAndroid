@@ -2,13 +2,15 @@ package com.adedom.websocketandroid.data.network
 
 import com.chat.ChatResponse
 import com.chat.SendMessageRequest
+import com.chat.fromJson
+import com.chat.toJson
 import io.ktor.client.*
 import io.ktor.client.engine.okhttp.*
 import io.ktor.client.features.websocket.*
 import io.ktor.http.*
 import io.ktor.http.cio.websocket.*
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.consumeAsFlow
 
 typealias ChatTypeAlias = (ChatResponse) -> Unit
 
@@ -21,38 +23,38 @@ class DruChatWebSocket {
     private suspend fun webSocket(socket: suspend DefaultClientWebSocketSession.() -> Unit) {
         client.wss(
             method = HttpMethod.Get,
-            host = "dru-chat.herokuapp.com",
+            host = "adedom-chatv2.herokuapp.com",
             port = DEFAULT_PORT,
-            path = "/ws",
+            path = "/webSocket/dru-chat",
         ) {
             socket.invoke(this)
         }
     }
 
-    private suspend fun outgoingSendFrameText(text: String) {
+    private suspend fun outgoingSendFrameText(text: Frame.Text) {
         webSocket {
-            outgoing.send(Frame.Text(text))
+            outgoing.send(text)
         }
     }
 
-    private suspend fun incomingReceiveFrameText(text: (String) -> Unit) {
+    private suspend fun incomingReceiveFrameText(text: (Frame.Text) -> Unit) {
         webSocket {
-            incoming.receiveAsFlow()
+            incoming.consumeAsFlow()
                 .collect { frame ->
-                    val readText = (frame as Frame.Text).readText()
-                    text.invoke(readText)
+                    text.invoke(frame as Frame.Text)
                 }
         }
     }
 
     suspend fun initialize(socket: ChatTypeAlias) {
         incomingReceiveFrameText {
-            socket.invoke(ChatResponse(message = it))
+            val response = it.fromJson<ChatResponse>()
+            socket.invoke(response)
         }
     }
 
     suspend fun sendMessage(sendMessage: SendMessageRequest) {
-        outgoingSendFrameText(sendMessage.message)
+        outgoingSendFrameText(sendMessage.toJson())
     }
 
     fun closeWebSocket() {

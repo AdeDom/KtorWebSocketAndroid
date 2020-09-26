@@ -39,6 +39,10 @@ class MainActivity : BaseActivity() {
             viewModel.fetchChat()
         }
 
+        etName.addTextChangedListener {
+            viewModel.setStateName(it.toString())
+        }
+
         etMessage.addTextChangedListener {
             viewModel.setStateMessage(it.toString())
         }
