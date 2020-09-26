@@ -15,10 +15,6 @@ class MainActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        viewModel.callApi.observe { message ->
-            Toast.makeText(baseContext, message, Toast.LENGTH_SHORT).show()
-        }
-
         viewModel.state.observe { state ->
             progressBar.visibility = if (state.loading) View.VISIBLE else View.INVISIBLE
 
@@ -27,6 +23,10 @@ class MainActivity : BaseActivity() {
             if (state.isChat) {
                 val message = "${state.chat?.name} : ${state.chat?.message}"
                 tvMessage.append("$message\n")
+            }
+
+            if (state.isToast) {
+                Toast.makeText(baseContext, state.messageToast, Toast.LENGTH_SHORT).show()
             }
         }
 

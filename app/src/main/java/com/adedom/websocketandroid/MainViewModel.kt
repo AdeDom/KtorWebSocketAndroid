@@ -1,7 +1,5 @@
 package com.adedom.websocketandroid
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.chat.SendMessageRequest
 import kotlinx.coroutines.launch
 
@@ -9,10 +7,6 @@ class MainViewModel(
     private val repository: DefaultChatRepository,
     private val webSocket: DefaultWebSocketRepository
 ) : BaseViewModel<MainState>(MainState()) {
-
-    private val _callApi = MutableLiveData<String>()
-    val callApi: LiveData<String>
-        get() = _callApi
 
     fun initialize() {
         launch {
@@ -31,9 +25,8 @@ class MainViewModel(
                 response.chat.forEach {
                     setState { copy(isChat = true, chat = it) }
                 }
-                setState { copy(isChat = false) }
-                _callApi.value = response.message
-                setState { copy(loading = false) }
+                setState { copy(isToast = true, messageToast = response.message) }
+                setState { copy(isChat = false, loading = false, isToast = false) }
             } catch (e: Throwable) {
                 setState { copy(loading = false) }
                 setError(e)
