@@ -20,41 +20,29 @@ class DruChatWebSocket {
         install(WebSockets)
     }
 
-    private suspend fun webSocket(socket: suspend DefaultClientWebSocketSession.() -> Unit) {
+    private var webSocket: WebSocketSession? = null
+
+    suspend fun initialize(socket: ChatTypeAlias) {
         client.wss(
             method = HttpMethod.Get,
             host = "adedom-chatv2.herokuapp.com",
             port = DEFAULT_PORT,
             path = "/webSocket/dru-chat",
         ) {
-            socket.invoke(this)
-        }
-    }
-
-    private suspend fun outgoingSendFrameText(text: Frame.Text) {
-        webSocket {
-            outgoing.send(text)
-        }
-    }
-
-    private suspend fun incomingReceiveFrameText(text: (Frame.Text) -> Unit) {
-        webSocket {
-            incoming.consumeAsFlow()
-                .collect { frame ->
-                    text.invoke(frame as Frame.Text)
+            webSocket = this
+            try {
+                incoming.consumeAsFlow().collect { frame ->
+                    val response = (frame as Frame.Text).fromJson<ChatResponse>()
+                    socket.invoke(response)
                 }
-        }
-    }
-
-    suspend fun initialize(socket: ChatTypeAlias) {
-        incomingReceiveFrameText {
-            val response = it.fromJson<ChatResponse>()
-            socket.invoke(response)
+            } finally {
+                webSocket = null
+            }
         }
     }
 
     suspend fun sendMessage(sendMessage: SendMessageRequest) {
-        outgoingSendFrameText(sendMessage.toJson())
+        webSocket?.outgoing?.send(sendMessage.toJson())
     }
 
     fun closeWebSocket() {
