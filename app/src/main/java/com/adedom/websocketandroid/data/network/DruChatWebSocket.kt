@@ -14,13 +14,13 @@ typealias ChatTypeAlias = (String) -> Unit
 @KtorExperimentalAPI
 class DruChatWebSocket {
 
-    private val client = HttpClient(OkHttp) {
-        install(WebSockets)
-    }
-
     private var webSocket: WebSocketSession? = null
 
     suspend fun initialize(socket: ChatTypeAlias) {
+        val client = HttpClient(OkHttp) {
+            install(WebSockets)
+        }
+
         client.wss(
             method = HttpMethod.Get,
             host = "dru-chat.herokuapp.com",
@@ -41,10 +41,6 @@ class DruChatWebSocket {
 
     suspend fun sendMessage(text: String) {
         webSocket?.outgoing?.send(Frame.Text(text))
-    }
-
-    fun closeWebSocket() {
-        client.close()
     }
 
 }

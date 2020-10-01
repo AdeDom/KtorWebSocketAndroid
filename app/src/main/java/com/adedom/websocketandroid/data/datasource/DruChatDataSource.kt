@@ -8,6 +8,4 @@ interface DruChatDataSource {
 
     suspend fun sendMessage(text: String)
 
-    fun closeWebSocket()
-
 }

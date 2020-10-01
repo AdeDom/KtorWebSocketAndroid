@@ -36,11 +36,4 @@ class MainViewModel(
         }
     }
 
-    override fun coroutineExceptionHandler() = initialize()
-
-    override fun onCleared() {
-        super.onCleared()
-        repository.closeWebSocket()
-    }
-
 }

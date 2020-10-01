@@ -15,8 +15,4 @@ class DefaultDruChatRepositoryImpl(
         dataSource.sendMessage(text)
     }
 
-    override fun closeWebSocket() {
-        dataSource.closeWebSocket()
-    }
-
 }

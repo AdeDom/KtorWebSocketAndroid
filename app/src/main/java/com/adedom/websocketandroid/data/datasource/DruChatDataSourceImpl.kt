@@ -14,8 +14,4 @@ class DruChatDataSourceImpl(private val provider: DataSourceProvider) : DruChatD
         provider.getProviderDruChatWebSocket().sendMessage(text)
     }
 
-    override fun closeWebSocket() {
-        provider.getProviderDruChatWebSocket().closeWebSocket()
-    }
-
 }
