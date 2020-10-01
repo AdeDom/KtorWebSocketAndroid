@@ -1,19 +1,17 @@
 package com.adedom.websocketandroid.data.network
 
-import com.chat.ChatResponse
-import com.chat.SendMessageRequest
-import com.chat.fromJson
-import com.chat.toJson
 import io.ktor.client.*
 import io.ktor.client.engine.okhttp.*
 import io.ktor.client.features.websocket.*
 import io.ktor.http.*
 import io.ktor.http.cio.websocket.*
+import io.ktor.util.*
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.consumeAsFlow
 
-typealias ChatTypeAlias = (ChatResponse) -> Unit
+typealias ChatTypeAlias = (String) -> Unit
 
+@KtorExperimentalAPI
 class DruChatWebSocket {
 
     private val client = HttpClient(OkHttp) {
@@ -25,14 +23,14 @@ class DruChatWebSocket {
     suspend fun initialize(socket: ChatTypeAlias) {
         client.wss(
             method = HttpMethod.Get,
-            host = "adedom-chatv2.herokuapp.com",
+            host = "dru-chat.herokuapp.com",
             port = DEFAULT_PORT,
-            path = "/webSocket/dru-chat",
+            path = "/ws",
         ) {
             webSocket = this
             try {
                 incoming.consumeAsFlow().collect { frame ->
-                    val response = (frame as Frame.Text).fromJson<ChatResponse>()
+                    val response = (frame as Frame.Text).readText()
                     socket.invoke(response)
                 }
             } finally {
@@ -41,8 +39,8 @@ class DruChatWebSocket {
         }
     }
 
-    suspend fun sendMessage(sendMessage: SendMessageRequest) {
-        webSocket?.outgoing?.send(sendMessage.toJson())
+    suspend fun sendMessage(text: String) {
+        webSocket?.outgoing?.send(Frame.Text(text))
     }
 
     fun closeWebSocket() {

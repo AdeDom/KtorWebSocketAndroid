@@ -3,10 +3,12 @@ package com.adedom.websocketandroid
 import android.app.Application
 import com.adedom.websocketandroid.data.di.getDataModule
 import com.adedom.websocketandroid.presentation.di.getPresentationModule
+import io.ktor.util.*
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
 
+@KtorExperimentalAPI
 class MainApplication : Application() {
     override fun onCreate() {
         super.onCreate()

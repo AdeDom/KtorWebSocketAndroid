@@ -23,8 +23,7 @@ class MainActivity : BaseActivity() {
             if (state.isSendMessage) etMessage.text.clear()
 
             if (state.isChat) {
-                val message = "${state.chat?.name} : ${state.chat?.message}"
-                tvMessage.append("$message\n")
+                tvMessage.append("${state.chat}\n")
             }
 
             if (state.isToast) {
@@ -36,11 +35,6 @@ class MainActivity : BaseActivity() {
 
         viewModel.attachFirstTime.observe {
             viewModel.initialize()
-            viewModel.fetchChat()
-        }
-
-        etName.addTextChangedListener {
-            viewModel.setStateName(it.toString())
         }
 
         etMessage.addTextChangedListener {

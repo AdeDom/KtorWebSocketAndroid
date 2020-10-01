@@ -2,7 +2,6 @@ package com.adedom.websocketandroid.presentation.main
 
 import com.adedom.websocketandroid.base.BaseViewModel
 import com.adedom.websocketandroid.data.repository.DefaultDruChatRepository
-import com.chat.SendMessageRequest
 import kotlinx.coroutines.launch
 
 class MainViewModel(
@@ -18,27 +17,6 @@ class MainViewModel(
         }
     }
 
-    fun fetchChat() {
-        launch {
-            try {
-                setState { copy(loading = true) }
-                val response = repository.fetchChat()
-                response.chat.forEach {
-                    setState { copy(isChat = true, chat = it) }
-                }
-                setState { copy(isToast = true, messageToast = response.message) }
-                setState { copy(isChat = false, loading = false, isToast = false) }
-            } catch (e: Throwable) {
-                setState { copy(loading = false) }
-                setError(e)
-            }
-        }
-    }
-
-    fun setStateName(name: String) {
-        setState { copy(name = name) }
-    }
-
     fun setStateMessage(message: String) {
         setState { copy(message = message) }
     }
@@ -46,12 +24,10 @@ class MainViewModel(
     fun sendMessage() {
         launch {
             try {
-                val name = state.value?.name.orEmpty()
                 val message = state.value?.message.orEmpty()
-                val request = SendMessageRequest(name = name, message = message)
                 setState { copy(message = "", isSendMessage = true, loading = true) }
                 setState { copy(isSendMessage = false) }
-                repository.sendMessage(request)
+                repository.sendMessage(message)
                 setState { copy(loading = false) }
             } catch (e: Throwable) {
                 setError(e)
